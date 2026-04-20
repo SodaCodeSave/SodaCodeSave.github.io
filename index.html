@@ -1,0 +1,1028 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>苏打</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link href="./fonts.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@4.9.0/fonts/remixicon.css" rel="stylesheet" />
+    <style>
+        :root {
+            --bg: #fef8fa;
+            --card: #ffffff;
+            --border: #f0e6f0;
+            --text: #2d1f3d;
+            --muted: #9585a5;
+            --accent: #f06292;
+            --accent-soft: #fce4ec;
+            --accent-soft2: #fff0f5;
+            --radius: 24px;
+            --radius-sm: 14px;
+            --radius-pill: 999px;
+            --shadow: 0 24px 60px -16px rgba(180, 120, 160, .22);
+            --shadow-sm: 0 8px 20px -8px rgba(180, 120, 160, .14);
+            --font: 'Inter', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+            --font-cute: 'Zen Maru Gothic', 'PingFang SC', 'Microsoft YaHei', system-ui, sans-serif;
+            --gradient: linear-gradient(135deg, #f06292, #f8bbd0, #ffe0e6);
+        }
+
+        [data-theme="dark"] {
+            --bg: #12101e;
+            --card: #1c1930;
+            --border: #2e2848;
+            --text: #f0eaf8;
+            --muted: #a99ec0;
+            --accent: #f48fb1;
+            --accent-soft: #2a1830;
+            --accent-soft2: #261828;
+            --shadow: 0 24px 56px -14px rgba(0, 0, 0, .55);
+            --shadow-sm: 0 8px 20px -6px rgba(0, 0, 0, .4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            -webkit-font-smoothing: antialiased;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* ===== 背景色块（缓慢漂移） ===== */
+        .bg-blob {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(90px);
+            opacity: .4;
+            pointer-events: none;
+            z-index: 0;
+            animation: drift 22s ease-in-out infinite;
+        }
+
+        .bg-blob.a {
+            width: 440px;
+            height: 440px;
+            background: #fce4ec;
+            top: -10%;
+            left: -8%
+        }
+
+        .bg-blob.b {
+            width: 360px;
+            height: 360px;
+            background: #ffe0e6;
+            bottom: -8%;
+            right: -5%;
+            animation-delay: -8s;
+            animation-duration: 26s
+        }
+
+        .bg-blob.c {
+            width: 220px;
+            height: 220px;
+            background: #e8d5f5;
+            top: 45%;
+            left: 58%;
+            animation-delay: -14s;
+            animation-duration: 19s
+        }
+
+        [data-theme="dark"] .bg-blob.a {
+            background: #2a1030;
+            opacity: .55
+        }
+
+        [data-theme="dark"] .bg-blob.b {
+            background: #2a1020;
+            opacity: .45
+        }
+
+        [data-theme="dark"] .bg-blob.c {
+            background: #1e1030;
+            opacity: .45
+        }
+
+        @keyframes drift {
+
+            0%,
+            100% {
+                transform: translate(0, 0)
+            }
+
+            33% {
+                transform: translate(18px, -14px)
+            }
+
+            66% {
+                transform: translate(-12px, 16px)
+            }
+        }
+
+        /* ===== 主卡片 ===== */
+        .card {
+            position: relative;
+            z-index: 1;
+            width: min(880px, 92vw);
+            background: var(--card);
+            border: 1px solid var(--border);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            padding: 38px 42px 30px;
+            display: grid;
+            grid-template-columns: auto 1fr;
+            grid-template-rows: auto auto auto auto;
+            gap: 0 32px;
+        }
+
+        /* ===== 闪光装饰点 ===== */
+        .sparkle {
+            position: absolute;
+            border-radius: 50%;
+            background: var(--accent);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .sparkle:nth-child(1) {
+            width: 6px;
+            height: 6px;
+            top: -14px;
+            right: 50px;
+            animation: pulse 3s ease-in-out infinite
+        }
+
+        .sparkle:nth-child(2) {
+            width: 5px;
+            height: 5px;
+            top: 35%;
+            left: -12px;
+            animation: pulse 3s ease-in-out 1s infinite
+        }
+
+        .sparkle:nth-child(3) {
+            width: 7px;
+            height: 7px;
+            bottom: 25%;
+            right: -10px;
+            animation: pulse 3s ease-in-out .5s infinite
+        }
+
+        .sparkle:nth-child(4) {
+            width: 4px;
+            height: 4px;
+            bottom: -12px;
+            left: 35%;
+            animation: pulse 3s ease-in-out 1.5s infinite
+        }
+
+        .sparkle:nth-child(5) {
+            width: 5px;
+            height: 5px;
+            top: 12%;
+            right: -8px;
+            animation: pulse 3s ease-in-out 2s infinite
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                opacity: .15;
+                transform: scale(1)
+            }
+
+            50% {
+                opacity: .45;
+                transform: scale(1.4)
+            }
+        }
+
+        /* ===== 头像 ===== */
+        .avatar-area {
+            grid-row: 1/3;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .avatar-wrap {
+            position: relative;
+            width: 130px;
+            height: 130px;
+            border-radius: 28px;
+            background: var(--gradient);
+            padding: 4px;
+            box-shadow: var(--shadow-sm);
+            transition: transform .4s cubic-bezier(.4, 0, .2, 1);
+        }
+
+        .avatar-wrap:hover {
+            transform: rotate(-3deg) scale(1.05)
+        }
+
+        .avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            border-radius: 24px;
+            object-fit: cover;
+            border: 3px solid var(--card);
+            display: block;
+        }
+
+        /* 头像角落旋转星星 */
+        .avatar-star {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 26px;
+            height: 26px;
+            background: var(--gradient);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 13px;
+            box-shadow: 0 3px 10px rgba(240, 98, 146, .35);
+            animation: spin 10s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg)
+            }
+        }
+
+        /* ===== 介绍区 ===== */
+        .intro {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            gap: 7px;
+            padding-top: 2px;
+        }
+
+        .intro h1 {
+            font-family: var(--font-cute);
+            font-size: clamp(22px, 3.2vw, 30px);
+            font-weight: 800;
+            letter-spacing: -.02em;
+            line-height: 1.25;
+        }
+
+        .intro h1 .hi {
+            background: var(--gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .intro p {
+            color: var(--muted);
+            font-size: 13.5px;
+            line-height: 1.65;
+            max-width: 460px
+        }
+
+        /* ===== 标签 ===== */
+        .tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px
+        }
+
+        .tag {
+            padding: 3px 11px;
+            border-radius: var(--radius-pill);
+            background: var(--accent-soft);
+            color: var(--accent);
+            font-size: 11px;
+            border: 1px solid rgba(240, 98, 146, .12);
+            transition: transform .15s ease;
+        }
+
+        .tag:hover {
+            transform: scale(1.06)
+        }
+
+        /* ===== 社交图标 ===== */
+        .social-row {
+            display: flex;
+            gap: 7px
+        }
+
+        .social-btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 30px;
+            height: 30px;
+            border-radius: 999px;
+            border: 1px solid var(--border);
+            background: var(--card);
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 15px;
+            transition: transform .2s ease, box-shadow .2s ease, background .2s ease, color .2s ease;
+        }
+
+        .social-btn:hover {
+            transform: translateY(-2px) scale(1.1);
+            box-shadow: var(--shadow-sm);
+            background: var(--accent-soft);
+            color: var(--accent);
+        }
+
+        /* ===== 游戏名片 ===== */
+        .game-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 7px
+        }
+
+        .game-card {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 5px 11px;
+            border-radius: 10px;
+            font-size: 11.5px;
+            font-weight: 500;
+            cursor: pointer;
+            user-select: none;
+            transition: transform .2s ease, box-shadow .2s ease;
+            border: 1px solid;
+        }
+
+        .game-card i {
+            font-size: 14px
+        }
+
+        .game-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-sm)
+        }
+
+        .game-card:active {
+            transform: scale(.97)
+        }
+
+        /* 各游戏独立配色 */
+        .game-card.vrchat {
+            background: #eef3ff;
+            border-color: #d4e2f7;
+            color: #4a7ec4
+        }
+
+        .game-card.delta {
+            background: #edf7ee;
+            border-color: #c4e6c8;
+            color: #4caf50
+        }
+
+        .game-card.ba {
+            background: #fff7eb;
+            border-color: #ffe0b2;
+            color: #ef8c00
+        }
+
+        [data-theme="dark"] .game-card.vrchat {
+            background: #181e30;
+            border-color: #283656;
+            color: #7ab0f0
+        }
+
+        [data-theme="dark"] .game-card.delta {
+            background: #182418;
+            border-color: #284028;
+            color: #81c784
+        }
+
+        [data-theme="dark"] .game-card.ba {
+            background: #28221a;
+            border-color: #483820;
+            color: #ffb74d
+        }
+
+        /* 悬浮提示 */
+        .game-card .tip {
+            position: absolute;
+            left: 50%;
+            bottom: calc(100% + 10px);
+            transform: translateX(-50%) translateY(4px);
+            white-space: normal;
+            width: max-content;
+            max-width: 220px;
+            padding: 7px 12px;
+            border-radius: 10px;
+            background: var(--text);
+            color: var(--bg);
+            font-size: 11px;
+            line-height: 1.5;
+            text-align: center;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity .2s ease, transform .2s ease;
+            z-index: 10;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .game-card .tip::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 5px solid transparent;
+            border-top-color: var(--text);
+        }
+
+        .game-card:hover .tip {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        /* ===== 可爱分割线 ===== */
+        .cute-divider {
+            grid-column: 1/-1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: none;
+            margin: 2px 0;
+        }
+
+        .cute-divider::before,
+        .cute-divider::after {
+            content: "";
+            flex: 1;
+            border-top: 2px dashed var(--border);
+        }
+
+        .cute-divider span {
+            color: var(--accent);
+            font-size: 12px;
+            opacity: .5;
+            flex-shrink: 0;
+        }
+
+        /* ===== 项目区 ===== */
+        .projects {
+            grid-column: 1/-1;
+            padding-top: 14px
+        }
+
+        .projects-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .projects-head h2 {
+            font-family: var(--font-cute);
+            font-size: 15px;
+            font-weight: 700
+        }
+
+        .projects-head a {
+            font-size: 12px;
+            color: var(--accent);
+            text-decoration: none;
+            transition: opacity .15s
+        }
+
+        .projects-head a:hover {
+            opacity: .7
+        }
+
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px
+        }
+
+        .proj {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 14px 14px 12px;
+            text-decoration: none;
+            color: inherit;
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+            transition: transform .3s ease, box-shadow .3s ease;
+        }
+
+        .proj:hover {
+            transform: translateY(-3px) perspective(600px) rotateX(2deg);
+            box-shadow: var(--shadow);
+        }
+
+        /* 各项目卡独立渐变底色 */
+        .proj:nth-child(1) {
+            background: linear-gradient(160deg, #f5f0ff, #ede4f8)
+        }
+
+        .proj:nth-child(2) {
+            background: linear-gradient(160deg, #fff5f0, #ffe8dc)
+        }
+
+        .proj:nth-child(3) {
+            background: linear-gradient(160deg, #f0f5ff, #e4ecff)
+        }
+
+        [data-theme="dark"] .proj:nth-child(1) {
+            background: linear-gradient(160deg, #201830, #241e34)
+        }
+
+        [data-theme="dark"] .proj:nth-child(2) {
+            background: linear-gradient(160deg, #2a2018, #30241c)
+        }
+
+        [data-theme="dark"] .proj:nth-child(3) {
+            background: linear-gradient(160deg, #182030, #1c2438)
+        }
+
+        /* 各项目图标独立配色 */
+        .proj:nth-child(1) .proj-icon {
+            color: #9c6ade
+        }
+
+        .proj:nth-child(2) .proj-icon {
+            color: #f09060
+        }
+
+        .proj:nth-child(3) .proj-icon {
+            color: #5c9ce6
+        }
+
+        [data-theme="dark"] .proj:nth-child(1) .proj-icon {
+            color: #b89aef
+        }
+
+        [data-theme="dark"] .proj:nth-child(2) .proj-icon {
+            color: #f4a878
+        }
+
+        [data-theme="dark"] .proj:nth-child(3) .proj-icon {
+            color: #90baf0
+        }
+
+        .proj-icon {
+            font-size: 22px;
+            line-height: 1
+        }
+
+        .proj h3 {
+            font-size: 13.5px;
+            font-weight: 700;
+            margin: 0
+        }
+
+        .proj p {
+            font-size: 11.5px;
+            color: var(--muted);
+            line-height: 1.5;
+            margin: 0
+        }
+
+        .proj-foot {
+            margin-top: auto;
+            display: flex;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        .proj-tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: var(--radius-pill);
+            background: rgba(255, 255, 255, .6);
+            color: var(--muted);
+            border: 1px solid rgba(0, 0, 0, .04);
+        }
+
+        [data-theme="dark"] .proj-tag {
+            background: rgba(255, 255, 255, .06);
+            border-color: rgba(255, 255, 255, .06)
+        }
+
+        .proj-arrow {
+            font-size: 13px;
+            color: var(--muted);
+            opacity: 0;
+            transform: translateX(-4px);
+            transition: opacity .2s, transform .2s;
+        }
+
+        .proj:hover .proj-arrow {
+            opacity: 1;
+            transform: translateX(0)
+        }
+
+        /* ===== 底部 ===== */
+        .bottom {
+            grid-column: 1/-1;
+            margin-top: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .bottom-left {
+            display: flex;
+            align-items: center;
+            gap: 8px
+        }
+
+        .bottom-left::before,
+        .bottom-left::after {
+            content: "✦";
+            color: var(--accent);
+            font-size: 7px;
+            opacity: .3;
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .bottom-left::after {
+            animation-delay: 1.5s
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: #4ade80;
+            box-shadow: 0 0 6px rgba(74, 222, 128, .5);
+            animation: blink 2.4s infinite;
+        }
+
+        @keyframes blink {
+
+            0%,
+            100% {
+                opacity: 1
+            }
+
+            50% {
+                opacity: .4
+            }
+        }
+
+        .status-text {
+            font-size: 12px;
+            color: var(--muted)
+        }
+
+        .links {
+            display: flex;
+            gap: 8px
+        }
+
+        .link-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            padding: 6px 15px;
+            border-radius: var(--radius-pill);
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            border: none;
+            cursor: pointer;
+            transition: transform .2s, box-shadow .2s, background .2s, color .2s;
+        }
+
+        .link-btn:hover {
+            transform: translateY(-1px)
+        }
+
+        .link-btn.primary {
+            background: var(--gradient);
+            color: #fff;
+            box-shadow: 0 8px 18px -4px rgba(240, 98, 146, .4);
+        }
+
+        .link-btn.primary:hover {
+            box-shadow: 0 12px 24px -4px rgba(240, 98, 146, .5)
+        }
+
+        .link-btn.ghost {
+            background: var(--accent-soft);
+            color: var(--accent)
+        }
+
+        .link-btn.ghost:hover {
+            background: var(--accent);
+            color: #fff
+        }
+
+        /* ===== 暗黑切换 ===== */
+        .theme-btn {
+            position: fixed;
+            top: 16px;
+            right: 16px;
+            z-index: 10;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border: 1px solid var(--border);
+            background: var(--card);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 15px;
+            transition: transform .2s, background .2s;
+            color: var(--muted);
+        }
+
+        .theme-btn:hover {
+            transform: scale(1.1)
+        }
+
+        /* ===== Toast ===== */
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 18px;
+            transform: translateX(-50%) translateY(6px);
+            padding: 6px 14px;
+            border-radius: 999px;
+            background: var(--text);
+            color: var(--bg);
+            font-size: 12px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity .2s ease, transform .2s ease;
+            box-shadow: var(--shadow-sm);
+            z-index: 20;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0)
+        }
+
+        /* ===== 响应式 ===== */
+        @media(max-width:680px) {
+            .card {
+                padding: 22px 18px 18px;
+                grid-template-columns: 1fr;
+                grid-template-rows: auto auto auto auto auto;
+                gap: 12px;
+                border-radius: 24px;
+                max-height: 96vh;
+                overflow-y: auto;
+            }
+
+            .avatar-area {
+                grid-row: auto;
+                flex-direction: row;
+                justify-content: center
+            }
+
+            .avatar-wrap {
+                width: 72px;
+                height: 72px;
+                border-radius: 18px
+            }
+
+            .avatar-wrap img {
+                border-radius: 14px
+            }
+
+            .avatar-star {
+                width: 20px;
+                height: 20px;
+                font-size: 10px;
+                top: -5px;
+                right: -5px
+            }
+
+            .projects-grid {
+                grid-template-columns: 1fr
+            }
+
+            .bottom {
+                flex-direction: column;
+                gap: 10px
+            }
+
+            .links {
+                width: 100%;
+                justify-content: center
+            }
+
+            .sparkle {
+                display: none
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="bg-blob a"></div>
+    <div class="bg-blob b"></div>
+    <div class="bg-blob c"></div>
+
+    <button class="theme-btn" id="themeBtn" title="切换主题">🌙</button>
+    <div class="toast" id="toast"></div>
+
+    <div class="card">
+        <!-- 闪光装饰 -->
+        <i class="sparkle"></i>
+        <i class="sparkle"></i>
+        <i class="sparkle"></i>
+        <i class="sparkle"></i>
+        <i class="sparkle"></i>
+
+        <!-- 头像 -->
+        <div class="avatar-area">
+            <div class="avatar-wrap">
+                <img src="https://avatars.githubusercontent.com/u/175384622" alt="苏打" />
+                <span class="avatar-star">✦</span>
+            </div>
+        </div>
+
+        <!-- 介绍 -->
+        <div class="intro">
+            <h1><span class="hi">你好！</span>欢迎来到我的小站</h1>
+            <p>我是苏打~ 初二在读，正在尝试开发自己感兴趣的东西</p>
+            <div class="tags">
+                <span class="tag">Python</span>
+                <span class="tag">HTML / CSS</span>
+                <span class="tag">JavaScript</span>
+                <span class="tag">Vue</span>
+                <span class="tag">Node.js</span>
+            </div>
+            <div class="social-row">
+                <a class="social-btn" title="Bilibili" href="https://space.bilibili.com/695791514" target="_blank"
+                    rel="noreferrer">
+                    <i class="ri-bilibili-fill"></i>
+                </a>
+                <a class="social-btn" title="QQ" href="https://wpa.qq.com/msgrd?v=3&uin=2256349342&site=qq&menu=yes"
+                    target="_blank" rel="noreferrer">
+                    <i class="ri-qq-fill"></i>
+                </a>
+                <a class="social-btn" title="邮件" href="mailto:your@email.com">
+                    <i class="ri-mail-fill"></i>
+                </a>
+            </div>
+            <!-- 游戏名片（各自配色，悬浮看ID，点击复制） -->
+            <div class="game-row">
+                <button class="game-card vrchat" type="button" data-copy="苏打SodaCode">
+                    <i class="ri-vidicon-fill"></i>
+                    <span>VRChat</span>
+                    <span class="tip">ID：苏打SodaCode<br><span style="opacity:.7">比较社恐 不会主动找话题</span></span>
+                </button>
+                <button class="game-card delta" type="button" data-copy="医疗手梅露露">
+                    <i class="ri-crosshair-2-fill"></i>
+                    <span>三角洲行动</span>
+                    <span class="tip">ID：医疗手梅露露</span>
+                </button>
+                <button class="game-card ba" type="button" data-copy="xlkg4et">
+                    <i class="ri-book-3-fill"></i>
+                    <span>蔚蓝档案</span>
+                    <span class="tip">好友码：xlkg4et</span>
+                </button>
+            </div>
+        </div>
+
+        <!-- 可爱分割线 -->
+        <div class="cute-divider"><span>✦</span></div>
+
+        <!-- 项目 -->
+        <div class="projects">
+            <div class="projects-head">
+                <h2>✦ 项目</h2>
+                <a href="https://github.com/SodaCodeSave" target="_blank" rel="noreferrer">全部 →</a>
+            </div>
+            <div class="projects-grid">
+                <a class="proj" href="https://github.com/MaaStellaSora/MaaStellaSora" target="_blank" rel="noreferrer">
+                    <span class="proj-icon"><i class="ri-sword-fill"></i></span>
+                    <h3>星塔助手</h3>
+                    <p>适用于星塔旅人的日常、爬塔自动化脚本</p>
+                    <div class="proj-foot">
+                        <span class="proj-tag">Python</span>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                </a>
+                <a class="proj" href="https://github.com/SodaCodeSave/QRmai" target="_blank" rel="noreferrer">
+                    <span class="proj-icon"><i class="ri-qr-code-fill"></i></span>
+                    <h3>QRmai</h3>
+                    <p>动态截取舞萌DX、中二节奏二维码并返还给客户端</p>
+                    <div class="proj-foot">
+                        <span class="proj-tag">Python</span>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                </a>
+                <a class="proj" href="https://github.com/SodaCodeSave/astrbot_plugin_biliread" target="_blank"
+                    rel="noreferrer">
+                    <span class="proj-icon"><i class="ri-bilibili-fill"></i></span>
+                    <h3>BiliRead</h3>
+                    <p>AstrBot 插件，让 AI 理解 B 站视频，并给出符合人设的自然回复</p>
+                    <div class="proj-foot">
+                        <span class="proj-tag">Agent</span>
+                        <span class="proj-arrow">→</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+
+        <!-- 底部 -->
+        <div class="bottom">
+            <div class="bottom-left">
+                <span class="status-dot"></span>
+                <span class="status-text" id="greeting">正在学习中</span>
+            </div>
+            <div class="links">
+                <a class="link-btn ghost" href="mailto:your@email.com">邮件联系</a>
+                <a class="link-btn primary" href="https://github.com/SodaCodeSave" target="_blank"
+                    rel="noreferrer">GitHub →</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 暗黑模式
+        const btn = document.getElementById('themeBtn');
+        function set(t) {
+            document.documentElement.setAttribute('data-theme', t);
+            btn.textContent = t === 'dark' ? '☀️' : '🌙';
+            localStorage.setItem('theme', t);
+        }
+        const saved = localStorage.getItem('theme');
+        if (saved) set(saved);
+        btn.addEventListener('click', () => {
+            set(document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark');
+        });
+
+        // 问候语
+        const h = new Date().getHours();
+        const g = document.getElementById('greeting');
+        let text = '正在学习中';
+        if (h >= 6 && h < 12) text = '早上好，正在学习中';
+        else if (h >= 12 && h < 14) text = '中午好，正在学习中';
+        else if (h >= 14 && h < 18) text = '下午好，正在学习中';
+        else if (h >= 18 && h < 23) text = '晚上好，正在学习中';
+        else text = '夜深了，还在学习';
+        g.textContent = text;
+
+        // 复制到剪贴板
+        async function copyText(text) {
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                await navigator.clipboard.writeText(text);
+                return true;
+            }
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.style.cssText = 'position:fixed;opacity:0';
+            document.body.appendChild(ta);
+            ta.select();
+            try { return document.execCommand('copy'); }
+            catch { return false; }
+            finally { document.body.removeChild(ta); }
+        }
+
+        // Toast 提示
+        const toastEl = document.getElementById('toast');
+        let toastTimer;
+        function showToast(msg) {
+            toastEl.textContent = msg;
+            toastEl.classList.add('show');
+            clearTimeout(toastTimer);
+            toastTimer = setTimeout(() => toastEl.classList.remove('show'), 1600);
+        }
+
+        // 游戏卡片点击复制
+        document.querySelectorAll('.game-card').forEach(el => {
+            el.addEventListener('click', async () => {
+                const id = el.dataset.copy;
+                if (!id) return;
+                const ok = await copyText(id);
+                showToast(ok ? '已复制：' + id : '复制失败，请手动复制');
+            });
+        });
+    </script>
+</body>
+
+</html>
