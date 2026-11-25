@@ -14,6 +14,9 @@ import type { LIGHT_DARK_MODE } from "@/types/config.ts";
 const seq: LIGHT_DARK_MODE[] = [LIGHT_MODE, DARK_MODE, AUTO_MODE];
 let mode: LIGHT_DARK_MODE = $state(AUTO_MODE);
 
+// 声明一个开放属性表，避免无 props 时被推断成 Record<string, never> 而拒绝 client:* 指令
+const props: Record<string, unknown> = $props();
+
 onMount(() => {
 	mode = getStoredTheme();
 	const darkModePreference = window.matchMedia("(prefers-color-scheme: dark)");
