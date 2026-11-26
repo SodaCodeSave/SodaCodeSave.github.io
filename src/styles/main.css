@@ -116,6 +116,21 @@
     @apply cursor-zoom-in
 }
 
+.custom-md img.inline-icon {
+    display: inline;
+    height: 1em;
+    width: auto;
+    max-width: none;
+    margin: 0 0.15em;
+    vertical-align: -0.125em;
+    border-radius: 0;
+    cursor: default;
+}
+
+.custom-md .inline-icon-error {
+    @apply text-sm text-red-500
+}
+
 ::selection {
     background-color: var(--selection-bg)
 }
