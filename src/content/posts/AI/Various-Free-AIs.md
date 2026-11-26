@@ -3,6 +3,7 @@ title: 各种免费的 DeepSeek v4.1 Flash、GLM 5.3 Flash等国模汇总
 published: 2026-11-26
 description: '各种国内可用的免费大模型、Agent，千问、GLM、DeepSeek、KiMi等'
 tags: ['DeepSeek', 'AI']
+image: './Various-Free-AIs.png'
 category: 'AI'
 draft: false 
 lang: 'zh_CN'
