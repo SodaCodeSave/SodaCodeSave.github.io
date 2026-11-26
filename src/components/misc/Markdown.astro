@@ -41,3 +41,53 @@ document.addEventListener("click", function (e: MouseEvent) {
     }
 });
 </script>
+
+<script>
+/* 涂黑内容的点击揭晓 */
+const SPOILER_SELECTOR = ".custom-md spoiler";
+
+function revealSpoiler(el: Element) {
+    if (el.classList.contains("is-revealed")) return;
+    el.classList.add("is-revealed");
+    el.setAttribute("aria-expanded", "true");
+}
+
+// 让涂黑内容可点击、可键盘操作
+function hydrateSpoilers() {
+    const spoilers = document.querySelectorAll<HTMLElement>(SPOILER_SELECTOR);
+
+    spoilers.forEach((el) => {
+        if (el.hasAttribute("tabindex")) return;
+        el.setAttribute("tabindex", "0");
+        el.setAttribute("role", "button");
+        el.setAttribute("aria-expanded", "false");
+    });
+}
+
+function handleSpoilerClick(e: Event) {
+    const target = e.target as Element | null;
+    const spoiler = target?.closest(SPOILER_SELECTOR);
+    if (spoiler) revealSpoiler(spoiler);
+}
+
+function handleSpoilerKeydown(e: KeyboardEvent) {
+    if (e.key !== "Enter" && e.key !== " ") return;
+    const target = e.target as Element | null;
+    const spoiler = target?.closest(SPOILER_SELECTOR);
+    if (!spoiler) return;
+    e.preventDefault();
+    revealSpoiler(spoiler);
+}
+
+hydrateSpoilers();
+document.addEventListener("click", handleSpoilerClick);
+document.addEventListener("keydown", handleSpoilerKeydown);
+document.addEventListener("astro:page-load", hydrateSpoilers);
+document.addEventListener("swup:page:view", hydrateSpoilers);
+window.addEventListener("load", hydrateSpoilers);
+
+// Swup 全局实例可用时，在每次页面切换后重新初始化涂黑内容
+const swupInstance = (window as unknown as { swup?: { hooks?: { on?: (name: string, cb: () => void) => void } } }).swup;
+swupInstance?.hooks?.on?.("page:view", hydrateSpoilers);
+</script>
+

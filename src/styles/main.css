@@ -140,13 +140,61 @@
     height: var(--collapsedHeight);
 }
 
+/* 涂黑内容：默认纯黑遮罩隐藏文字，鼠标悬浮显白字，触屏设备直接显示灰字 */
 .custom-md spoiler {
-  @apply bg-[var(--codeblock-bg)] hover:bg-transparent px-1 py-0.5 overflow-hidden rounded-md transition-all duration-150;
+    @apply px-1 py-0.5 rounded-md cursor-pointer;
+    @apply transition-colors duration-150;
 
-  &:not(:hover) {
-    color: var(--codeblock-bg);
+    background-color: #000;
+    color: transparent;
+    box-decoration-break: clone;
+    -webkit-box-decoration-break: clone;
+    -webkit-tap-highlight-color: transparent;
+
     * {
-        color: var(--codeblock-bg);
+        color: transparent;
+        @apply transition-colors duration-150;
     }
-  }
+}
+
+/* 支持悬浮的设备：悬浮揭晓白色文字 */
+@media (hover: hover) and (pointer: fine) {
+    .custom-md spoiler:hover {
+        color: #fff;
+
+        * {
+            color: #fff;
+        }
+    }
+}
+
+/* 触屏 / 无悬浮能力的设备：不遮黑，直接显示灰字 */
+@media (hover: none), (pointer: coarse) {
+    .custom-md spoiler {
+        background-color: transparent;
+        color: rgba(0, 0, 0, 0.45);
+
+        * {
+            color: rgba(0, 0, 0, 0.45);
+        }
+    }
+
+    :root.dark .custom-md spoiler {
+        color: rgba(255, 255, 255, 0.45);
+
+        * {
+            color: rgba(255, 255, 255, 0.45);
+        }
+    }
+}
+
+/* 点击揭晓后永久显示 */
+.custom-md spoiler.is-revealed {
+    background-color: #000;
+    color: #fff;
+    cursor: default;
+
+    * {
+        color: #fff;
+    }
 }
